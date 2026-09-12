@@ -24,7 +24,7 @@ public class Deadlock {
             synchronized (lockA) {
                 System.out.println("A acquired lock A");
                 try {
-                    Thread.sleep(5);
+                    Thread.sleep(500);
                 } catch (Exception e) {
 
                 }
@@ -32,7 +32,7 @@ public class Deadlock {
                 synchronized (lockB) {
                     System.out.println("A acquired lock B");
                     try {
-                        Thread.sleep(5);
+                        Thread.sleep(500);
                     } catch (Exception e) {
 
                     }
@@ -46,7 +46,7 @@ public class Deadlock {
             synchronized (lockB) {
                 System.out.println("B acquired lock B");
                 try {
-                    Thread.sleep(5);
+                    Thread.sleep(500);
                 } catch (Exception e) {
 
                 }
@@ -54,7 +54,7 @@ public class Deadlock {
                 synchronized (lockA) {
                     System.out.println("B acquired lock A");
                     try {
-                        Thread.sleep(5);
+                        Thread.sleep(500);
                     } catch (Exception e) {
 
                     }
