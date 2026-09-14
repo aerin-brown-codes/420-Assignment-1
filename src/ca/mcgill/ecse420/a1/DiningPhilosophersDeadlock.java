@@ -3,14 +3,12 @@ package ca.mcgill.ecse420.a1;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.*;
 
 public class DiningPhilosophers {
 
 	static int numberOfPhilosophers = 5;
 	static Philosopher[] philosophers;
 	static Object[] chopsticks;
-	static Lock napkin = new ReentrantLock();
 	
 	public static void main(String[] args) {
 
@@ -58,7 +56,6 @@ public class DiningPhilosophers {
 				}
 
 				System.out.println("Philosopher " + this.num + " is attempting to eat...");
-				napkin.lock();
 				synchronized (chopsticks[left_chopstick]) {
 					System.out.println("Philosopher " + this.num + " has acquired their left chopstick, number " + left_chopstick + ". They are attempting to take their right chopstick.");
 					synchronized (chopsticks[right_chopstick]) {
@@ -70,7 +67,6 @@ public class DiningPhilosophers {
 						}
 					}
 				}
-				napkin.unlock();
 			}
 			
 			
