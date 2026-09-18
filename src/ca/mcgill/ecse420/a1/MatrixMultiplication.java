@@ -2,6 +2,11 @@ package ca.mcgill.ecse420.a1;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class MatrixMultiplication {
 	
@@ -11,21 +16,21 @@ public class MatrixMultiplication {
     public static void main(String[] args) {
 		
 		// Generate two random matrices, same size
-		double[][] a = generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
-		double[][] b = generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
+		double[][] a = MatrixMultiplicationHelpers.generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
+		double[][] b = MatrixMultiplicationHelpers.generateRandomMatrix(MATRIX_SIZE, MATRIX_SIZE);
 		sequentialMultiplyMatrix(a, b);
 		parallelMultiplyMatrix(a, b);
 
 		System.out.println("matrix A:");
-		printMatrix(a);
+		MatrixMultiplicationHelpers.printMatrix(a);
 		
 		System.out.println("matrix B:");
-		printMatrix(b);
+		MatrixMultiplicationHelpers.printMatrix(b);
 
 		System.out.println("AxB (sequential):");
-		printMatrix(sequentialMultiplyMatrix(a, b));	
+		MatrixMultiplicationHelpers.printMatrix(sequentialMultiplyMatrix(a, b));	
 		
-		System.out.println(verifySize(sequentialMultiplyMatrix(a, b), true));
+		System.out.println(MatrixMultiplicationHelpers.verifySize(sequentialMultiplyMatrix(a, b), true));
 
 	}
 	
@@ -62,84 +67,26 @@ public class MatrixMultiplication {
 	 * @return the result of the multiplication
 	 * */
     public static double[][] parallelMultiplyMatrix(double[][] a, double[][] b) {
-		return new double[a.length][b[0].length];
-	}
-        
-	/**
-	 * Populates a matrix of given size with randomly generated integers between 0-10.
-	 * @param numRows number of rows
-	 * @param numCols number of cols
-	 * @return matrix
-	 */
-	private static double[][] generateRandomMatrix (int numRows, int numCols) {
-		double matrix[][] = new double[numRows][numCols];
-		for (int row = 0 ; row < numRows ; row++ ) {
-			for (int col = 0 ; col < numCols ; col++ ) {
-				matrix[row][col] = (double) ((int) (Math.random() * 10.0));
-			}
+		double[][] result = new double[MATRIX_SIZE][MATRIX_SIZE];
+		double numRows = (double) MATRIX_SIZE / (double) NUMBER_THREADS;
+
+		List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
+
+		int rowStart = 0;
+		int rowEnd = 0;
+
+
+		ExecutorService threadPool = Executors.newFixedThreadPool(NUMBER_THREADS);
+		try{
+			threadPool.invokeAll(tasks);
+			threadPool.shutdown();
+			threadPool.awaitTermination(10, TimeUnit.MINUTES);
+		} catch(Exception e){
+			e.printStackTrace();
+			System.exit(1);
 		}
-        return matrix;
-    }
-
-	/**
-	 * Print elements of a matrix
-	 * @param matrix the matrix
-	 */
-	private static void printMatrix(double[][] matrix){
-		for (int i = 0; i < matrix.length; i++) {
-			for (int j = 0; j < matrix[i].length; j++) {
-				System.out.print(matrix[i][j] + "\t"); 
-			}
-			System.out.println(); 
-    	}
-	}
-
-	/**
-	 * Generate identity matrix, of same size as the given matrix
-	 * @return identity matrix of the same size
-	 */
-	private static double[][] generateIdentityMatrix() {
-		double[][] identity = new double[MATRIX_SIZE][MATRIX_SIZE];
-		for (int i = 0; i < MATRIX_SIZE; i++) {
-			identity[i][i] = 1.0;
-		}
-		return identity;
-	}
-
-	/**
-	 * Verify that a given matrix is the correct size, since A x I = A, 
-	 * @param matrix the matrix to verify the size of
-	 * @param isSequential is true if the matrix multiplication method was sequential, else it is parallel
-	 */
-	private static boolean verifySize(double[][] matrix, boolean isSequential) {
-		double[][] I = generateIdentityMatrix();
-		double[][] check = new double[MATRIX_SIZE][MATRIX_SIZE];
 		
-		if (isSequential){
-			System.out.println("Verify matrix size (sequential):");
-
-			check = sequentialMultiplyMatrix(matrix, I);
-			for (int i = 0; i < MATRIX_SIZE; i++) {
-				for (int j=0; j < MATRIX_SIZE; j++){
-					if (check[i][j] != matrix[i][j]){
-						return false;
-					}
-				}
-			}
-
-		} else{
-			System.out.println("Verify matrix size (parallel):");
-			
-			check = parallelMultiplyMatrix(matrix, I);
-			for (int i = 0; i < MATRIX_SIZE; i++) {
-				for (int j=0; j < MATRIX_SIZE; j++){
-					if (check[i][j] != matrix[i][j]){
-						return false;
-					}
-				}
-			}
-		}
-		return true;
+		return result;
 	}
-
+ 
 }
