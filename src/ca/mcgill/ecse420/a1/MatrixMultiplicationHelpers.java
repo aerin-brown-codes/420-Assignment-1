@@ -1,8 +1,6 @@
 package ca.mcgill.ecse420.a1;
 
 public class MatrixMultiplicationHelpers {
-	private static final int NUMBER_THREADS = 1;
-	private static final int MATRIX_SIZE = 3;
     /**
 	 * Populates a matrix of given size with randomly generated integers between 0-10.
 	 * @param numRows number of rows
@@ -36,12 +34,40 @@ public class MatrixMultiplicationHelpers {
 	 * Generate identity matrix, of same size as the given matrix
 	 * @return identity matrix of the same size
 	 */
-	public static double[][] generateIdentityMatrix() {
-		double[][] identity = new double[MATRIX_SIZE][MATRIX_SIZE];
-		for (int i = 0; i < MATRIX_SIZE; i++) {
+	public static double[][] generateIdentityMatrix(int matrix_size) {
+		double[][] identity = new double[matrix_size][matrix_size];
+		for (int i = 0; i < matrix_size; i++) {
 			identity[i][i] = 1.0;
 		}
 		return identity;
+	}
+
+	/**
+	 * Compare two matrices of the same size
+	 * @param matrixA is the first matrix 
+	 * @param matrixB is the second matrix
+	 * @return true if both matrices are identical
+	 */
+	public static boolean compareMatrices(double[][] matrixA, double[][] matrixB){
+		
+		if (matrixA.length != matrixB.length){
+			System.out.println("Matrices are not the same size");
+			return false;
+		} else if (matrixA[0].length != matrixB[0].length){
+			System.out.println("Matrices are not the same size");
+			return false;
+		} 
+		int n = matrixA.length;
+
+		for (int i = 0; i < n; i++) {
+			for (int j=0; j < n; j++){
+				if (matrixA[i][j] != matrixB[i][j]){
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -49,34 +75,42 @@ public class MatrixMultiplicationHelpers {
 	 * @param matrix the matrix to verify the size of
 	 * @param isSequential is true if the matrix multiplication method was sequential, else it is parallel
 	 */
-	public static boolean verifySize(double[][] matrix, boolean isSequential) {
-		double[][] I = generateIdentityMatrix();
-		double[][] check = new double[MATRIX_SIZE][MATRIX_SIZE];
+	public static boolean verify(double[][] matrix, boolean isSequential) {
+		int n = matrix.length;
+		double[][] I = generateIdentityMatrix(n);
+		double[][] check = new double[n][n];
 		
 		if (isSequential){
 			System.out.println("Verify matrix size (sequential):");
 
 			check = MatrixMultiplication.sequentialMultiplyMatrix(matrix, I);
-			for (int i = 0; i < MATRIX_SIZE; i++) {
-				for (int j=0; j < MATRIX_SIZE; j++){
-					if (check[i][j] != matrix[i][j]){
-						return false;
-					}
-				}
-			}
+			compareMatrices(check, matrix);
 
 		} else{
 			System.out.println("Verify matrix size (parallel):");
 			
 			check = MatrixMultiplication.parallelMultiplyMatrix(matrix, I);
-			for (int i = 0; i < MATRIX_SIZE; i++) {
-				for (int j=0; j < MATRIX_SIZE; j++){
-					if (check[i][j] != matrix[i][j]){
-						return false;
-					}
-				}
-			}
+			compareMatrices(check, matrix);
+
 		}
 		return true;
 	}
+
+	/**
+	 * 
+	 * @param task to get the length of duration
+	 * @return duration of the task
+	 */
+	public static double measureTime(Runnable task){
+		long startTime = System.nanoTime();
+
+		task.run();
+
+		long endTime = System.nanoTime();
+
+		double duration = (endTime-startTime)/1000000.0;
+
+		return duration;
+	}
+
 }

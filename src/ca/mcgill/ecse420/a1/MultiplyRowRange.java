@@ -19,10 +19,10 @@ public class MultiplyRowRange implements Runnable {
     public void run(){
         int n = a.length; // same as MATRIX_SIZE
 
-        for (int i=startRow; i<endRow-1; i++){ // loop through row
-            for (int j=0; j<n-1; j++){ // loop through column
+        for (int i=startRow; i<endRow; i++){ // loop through row
+            for (int j=0; j<n; j++){ // loop through column
                 result[i][j] = 0; // initialize cell
-                for (int k=0; k<n-1; k++){ // dot product, to get the value of each cell
+                for (int k=0; k<n; k++){ // dot product, to get the value of each cell
                     result[i][j] += a[i][k] * b[k][j];
                 }
             }
