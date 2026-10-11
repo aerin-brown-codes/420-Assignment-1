@@ -21,7 +21,7 @@ public class MatrixMultiplicationHelpers {
 	 * Print elements of a matrix
 	 * @param matrix the matrix
 	 */
-	public static void printMatrix(double[][] matrix){
+	public static void printMatrix(double[][] matrix) {
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
 				System.out.print(matrix[i][j] + "\t"); 
@@ -48,20 +48,20 @@ public class MatrixMultiplicationHelpers {
 	 * @param matrixB is the second matrix
 	 * @return true if both matrices are identical
 	 */
-	public static boolean compareMatrices(double[][] matrixA, double[][] matrixB){
+	public static boolean compareMatrices(double[][] matrixA, double[][] matrixB) {
 		
-		if (matrixA.length != matrixB.length){
+		if (matrixA.length != matrixB.length) {
 			System.out.println("Matrices are not the same size");
 			return false;
-		} else if (matrixA[0].length != matrixB[0].length){
+		} else if (matrixA[0].length != matrixB[0].length) {
 			System.out.println("Matrices are not the same size");
 			return false;
 		} 
 		int n = matrixA.length;
 
 		for (int i = 0; i < n; i++) {
-			for (int j=0; j < n; j++){
-				if (matrixA[i][j] != matrixB[i][j]){
+			for (int j=0; j < n; j++) {
+				if (matrixA[i][j] != matrixB[i][j]) {
 					return false;
 				}
 			}
@@ -80,13 +80,13 @@ public class MatrixMultiplicationHelpers {
 		double[][] I = generateIdentityMatrix(n);
 		double[][] check = new double[n][n];
 		
-		if (isSequential){
+		if (isSequential) {
 			System.out.println("Verify matrix size (sequential):");
 
 			check = MatrixMultiplication.sequentialMultiplyMatrix(matrix, I);
 			compareMatrices(check, matrix);
 
-		} else{
+		} else {
 			System.out.println("Verify matrix size (parallel):");
 			
 			check = MatrixMultiplication.parallelMultiplyMatrix(matrix, I);
@@ -101,7 +101,7 @@ public class MatrixMultiplicationHelpers {
 	 * @param task to get the length of duration
 	 * @return duration of the task
 	 */
-	public static double measureTime(Runnable task){
+	public static double measureTime(Runnable task) {
 		long startTime = System.nanoTime();
 
 		task.run();
@@ -112,5 +112,4 @@ public class MatrixMultiplicationHelpers {
 
 		return duration;
 	}
-
 }

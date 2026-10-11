@@ -1,12 +1,11 @@
 package ca.mcgill.ecse420.a1;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
-
-import java.util.List;
-import java.util.ArrayList;
 
 public class MatrixMultiplication {
 	
@@ -131,7 +130,7 @@ public class MatrixMultiplication {
 		}
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(NUMBER_THREADS);
-		try{
+		try {
 			threadPool.invokeAll(tasks);
 			threadPool.shutdown();
 			threadPool.awaitTermination(10, TimeUnit.MINUTES);
@@ -142,6 +141,5 @@ public class MatrixMultiplication {
 		}
 		
 		return result;
-	}
- 
+	} 
 }

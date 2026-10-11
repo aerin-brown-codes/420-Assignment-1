@@ -15,9 +15,7 @@ public class Deadlock {
         executor.shutdown();
     }
 
-    public static class Dummy {
-
-    }
+    public static class Dummy {}
 
     public static class A implements Runnable {
         public void run() {
@@ -33,9 +31,7 @@ public class Deadlock {
                     System.out.println("A acquired lock B");
                     try {
                         Thread.sleep(500);
-                    } catch (Exception e) {
-
-                    }
+                    } catch (Exception e) {}
                 }
             }
         }
@@ -55,12 +51,9 @@ public class Deadlock {
                     System.out.println("B acquired lock A");
                     try {
                         Thread.sleep(500);
-                    } catch (Exception e) {
-
-                    }
+                    } catch (Exception e) {}
                 }
             }
         }
     }
-
 }
