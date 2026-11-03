@@ -30,7 +30,6 @@ public class TestLock {
         for (int i=0; i<n; i++){
             threads[i] = new Thread(()->{
                 lock.lock();
-                int local_count = count;
 
                 try{
                     Thread.sleep(WAIT_CONDITION);
@@ -38,9 +37,7 @@ public class TestLock {
                     e.printStackTrace();
                 }
 
-                count = local_count + 1;
-
-                System.out.println(count);
+                System.out.println(++count);
                 lock.unlock();
             });
         }
@@ -55,9 +52,5 @@ public class TestLock {
                 e_thread.printStackTrace();
             }
         }
-
-        
-
-       //new java.util.Scanner(System.in).nextLine();
     }
 }
