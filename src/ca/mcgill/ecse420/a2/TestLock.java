@@ -4,13 +4,25 @@ public class TestLock {
     private static volatile int count;
     private static final int WAIT_LOCK = 500;
     private static final int WAIT_CONDITION = 1000;
+    private static final int WAIT_LOOP = 5000;
+
 
     public static void main(String[] args) {
         // Lock lock = new BakeryLock(2);
         // testLock(lock, 2);
-        int n=8;
-        Lock lock = new FilterLock(n);
-        testLock(lock, n);
+        
+
+        for (int n=2; n<9; n++){
+            Lock lock = new FilterLock(n);
+            testLock(lock, n);
+
+            try {
+                Thread.sleep(WAIT_LOOP);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         
     }
 
