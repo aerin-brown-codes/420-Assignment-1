@@ -6,7 +6,6 @@ import java.util.concurrent.TimeUnit;
 public class FilterLock implements Lock{
     private volatile int[] level;
     private volatile int[] victim;
-    //private final int n;
 
     public FilterLock(int n){
         level = new int[n];

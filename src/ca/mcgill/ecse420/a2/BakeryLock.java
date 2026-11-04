@@ -16,16 +16,32 @@ public class BakeryLock implements Lock{
 
     @Override
     public void lock() {
+        int i = ThreadId.getThreadId();
+        int n = label.length;
+
         flag[i] = true;
-        label[i] = max(label[0], ..., label[n-1])+1;
 
-        while(){
+        int max_value = -1;
+        for (int value : label){
+            if (value > max_value){
+                max_value = value;
+            }
+        }
 
+        label[i] = max_value + 1;
+
+        for (int k=0; k<n; k++){
+            if (k != i){
+                while (flag[k] && (label[k] < label[i] || (label[k] == label[i] && k<i))){};
+            } else{
+                continue; 
+            }
         }
     }
 
     @Override 
     public void unlock(){
+        int i = ThreadId.getThreadId();
         flag[i] = false;
     }
 }
